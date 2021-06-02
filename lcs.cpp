@@ -99,5 +99,15 @@ int main()
     //printing both
     cout<<reverseLcs<<endl;
     cout<<lcs<<endl;
+
+    //printing lcs length table s
+    for(int i=0;i<s.size();i++)
+    {
+        for(int j=0;j<s[0].size();j++)
+        {
+            cout<<s[i][j]<<" ";
+        }
+        cout<<endl;
+    }
     
 }
