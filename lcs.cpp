@@ -109,5 +109,30 @@ int main()
         }
         cout<<endl;
     }
+
+    //printing lcs path table p
+    for(int i=0;i<p.size();i++)
+    {
+        for(int j=0;j<p[0].size();j++)
+        {
+            if(p[i][j]==-5)
+            {
+                cout<<"n"<<" ";
+            }
+            else if(p[i][j]==BOTTOM)
+            {
+                cout<<"B"<<" ";
+            }
+            else if(p[i][j]==DIAGONAL)
+            {
+                cout<<"D"<<" ";
+            }
+            else if(p[i][j]==RIGHT)
+            {
+                cout<<"R"<<" ";
+            }
+        }
+        cout<<endl;
+    }
     
 }
