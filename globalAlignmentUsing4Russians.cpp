@@ -82,7 +82,7 @@ void calculate(int i, int j, int t, vector<vector<int>> &hTable)
     
     string rowString = calculateString(i,t);
     string colString = calculateString(j,t);
-    cout<<rowString<<" "<<colString<<endl;
+    // cout<<rowString<<" "<<colString<<endl;
     hTable[i][j] = lcsLengthMemoryEfficient(rowString,colString);
 }
 
@@ -125,16 +125,11 @@ int getHash(string str)
 
 int main()
 {
-    cout<<"kill meh"<<endl;
+    // cout<<"kill meh"<<endl;
     srand(time(0));
-    int len = 256;
-    int n = log2(len);
-    if(pow(2,n)!=len)
-    {
-        n = n + 1;  //log2(100) = 6 but 2^6 = 64 so taking the ceiling
-    }
-    int t = n/4;
-    if(t*4!=n)
+    int n = 4096;
+    int t = log2(n)/4;
+    if(pow(2,t*4)!=n)
     {
         cout<<"unhandled case so exiting"<<endl;
         return -5;
@@ -185,7 +180,7 @@ int main()
     }
 
     // generate random test cases
-    int stringLen = pow(2,n);
+    int stringLen = n;
     char *u1 = new char[stringLen+1];
     char *v1 = new char[stringLen+1];
     u1[stringLen+1] = '\0';
@@ -211,22 +206,22 @@ int main()
     }
     string u(u1);
     string v(v1);
-    cout<<"String u: "<<u<<endl;
-    cout<<"String v: "<<v<<endl;
+    // cout<<"String u: "<<u<<endl<<endl;
+    // cout<<"String v: "<<v<<endl<<endl;
 
-    for(int i=0;i<pow(4,t);i++)
-    {
+    // for(int i=0;i<pow(4,t);i++)
+    // {
        
-        for(int j=0;j<pow(4,t);j++)
-        {
-            cout<<hTable[i][j]<<" "; 
-        }
-        cout<<endl;
-    }
+    //     for(int j=0;j<pow(4,t);j++)
+    //     {
+    //         cout<<hTable[i][j]<<" "; 
+    //     }
+    //     cout<<endl;
+    // }
 
     vector<vector<int>> s;
     vector<vector<int>> p;
-    int dpTableSize = (pow(2,n)/t) + 1;
+    int dpTableSize = (n/t) + 1;
     for(int i=0;i<dpTableSize;i++)
     {
         vector<int> temp;
@@ -254,9 +249,11 @@ int main()
             string colString = v.substr(t*(j-1),t);
             int rowStringHash = getHash(rowString);
             int colStringHash = getHash(colString);
-            int t1 = s[i-1][j]-sigmaTable[rowStringHash][colStringHash];
-            int t2 = s[i][j-1]-sigmaTable[rowStringHash][colStringHash];
-            int t3 = s[i-1][j-1]-hTable[rowStringHash][colStringHash];
+            int sigma = sigmaTable[rowStringHash][colStringHash];
+            int beta = hTable[rowStringHash][colStringHash];
+            int t1 = s[i-1][j]-sigma;
+            int t2 = s[i][j-1]-sigma;
+            int t3 = s[i-1][j-1]+beta;
             int val = max(t1, max(t2, t3));
             if(val==t3)
             {
@@ -273,9 +270,12 @@ int main()
                 s[i][j] = t2;
                 p[i][j] = RIGHT;
             }
+
         }
     }
 
+    cout<<"Alignment Score: "<<s[s.size()-1][s.size()-1]<<endl;
+    cout<<"from lcs score we get: "<<lcsLengthMemoryEfficient(u,v)<<endl;
     // for(int i=0;i<s.size();i++)
     // {
     //     for(int j=0;j<s[0].size();j++)
